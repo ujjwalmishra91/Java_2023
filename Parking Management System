@@ -1,0 +1,71 @@
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Scanner;
+
+public class App {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ParkingSystem parkingSystem = new ParkingSystem(20); // Initialize with 20 parking spots
+
+        while (true) {
+            System.out.println("Please select an option:");
+            System.out.println("1. Park a car");
+            System.out.println("2. Remove a car");
+            System.out.println("3. View parking status");
+            System.out.println("4. Display car details");
+            System.out.println("5. Calculate parking fees");
+            System.out.println("6. Search for parked cars");
+            System.out.println("7. Exit");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Please enter the car license plate number: ");
+                    String plateNumber = scanner.next();
+                    if (parkingSystem.parkCar(plateNumber)) {
+                        System.out.println("Car parked successfully!");
+                    } else {
+                        System.out.println("Sorry, there are no available parking spots.");
+                    }
+                    break;
+                case 2:
+                    System.out.print("Please enter the car license plate number: ");
+                    plateNumber = scanner.next();
+                    if (parkingSystem.removeCar(plateNumber)) {
+                        System.out.println("Car removed successfully!");
+                    } else {
+                        System.out.println("Sorry, the car with the given license plate number was not found.");
+                    }
+                    break;
+                case 3:
+                    parkingSystem.viewParkingStatus();
+                    break;
+                case 4:
+                    System.out.print("Please enter the car license plate number: ");
+                    plateNumber = scanner.next();
+                    parkingSystem.displayCarDetails(plateNumber);
+                    break;
+                case 5:
+                    System.out.print("Please enter the car license plate number: ");
+                    plateNumber = scanner.next();
+                    double fee = parkingSystem.calculateParkingFee(plateNumber);
+                    System.out.println("Parking fee: $" + fee);
+                    break;
+                case 6:
+                    System.out.print("Please enter a partial license plate number: ");
+                    String partialPlateNumber = scanner.next();
+                    parkingSystem.search(partialPlateNumber);
+                    break;
+                case 7:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+    }
+}
