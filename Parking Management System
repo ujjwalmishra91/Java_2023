@@ -69,3 +69,102 @@ public class App {
         }
     }
 }
+class ParkingSystem {
+    private int availableSpots;
+    private Car[] parkedCars;
+
+    public ParkingSystem(int totalSpots) {
+        this.availableSpots = totalSpots;
+        this.parkedCars = new Car[totalSpots];
+    }
+
+    public boolean parkCar(String plateNumber) {
+        if (availableSpots > 0) {
+            for (int i = 0; i < parkedCars.length; i++) {
+                if (parkedCars[i] == null) {
+                    parkedCars[i] = new Car(plateNumber,
+                            LocalDateTime.now());
+                    availableSpots--;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+    public boolean removeCar(String plateNumber) {
+        for (int i = 0; i < parkedCars.length; i++) {
+            if (parkedCars[i] != null && parkedCars[i].getPlateNumber().equals(plateNumber)) {
+                parkedCars[i] = null;
+                availableSpots++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void viewParkingStatus() {
+        System.out.println("Parking status:");
+        for (int i = 0; i < parkedCars.length; i++) {
+            if (parkedCars[i] == null) {
+                System.out.println("Spot " + (i + 1) + ": empty");
+            } else {
+                System.out.println("Spot " + (i + 1) + ": " + parkedCars[i].getPlateNumber());
+            }
+        }
+    }
+
+    public void displayCarDetails(String plateNumber) {
+        for (int i = 0; i < parkedCars.length; i++) {
+            if (parkedCars[i] != null && parkedCars[i].getPlateNumber().equals(plateNumber)) {
+                System.out.println("License plate number: " + parkedCars[i].getPlateNumber());
+                System.out.println("Parking spot number: " + (i + 1));
+                System.out.println("Date and time parked: " + parkedCars[i].getDateTime());
+                return;
+            }
+        }
+        System.out.println("Sorry, the car with the given license plate number was not found.");
+    }
+
+    public double calculateParkingFee(String plateNumber) {
+        for (int i = 0; i < parkedCars.length; i++) {
+            if (parkedCars[i] != null && parkedCars[i].getPlateNumber().equals(plateNumber)) {
+                LocalDateTime endTime = LocalDateTime.now();
+                LocalDateTime startTime = parkedCars[i].getDateTime();
+                long minutes = ChronoUnit.MINUTES.between(startTime, endTime);
+                double hours = minutes / 60.0;
+                return hours * 1.5; 
+            }
+        }
+        return 0.0;
+    }
+
+    public void search(String partialPlateNumber) {
+        System.out.println("Search results:");
+        for (int i = 0; i < parkedCars.length; i++) {
+            if (parkedCars[i] != null && parkedCars[i].getPlateNumber().contains(partialPlateNumber)) {
+                System.out.println("Plate number: " + parkedCars[i].getPlateNumber());
+                System.out.println("Spot number: " + (i + 1));
+            }
+        }
+    }
+
+class Car {
+    private String plateNumber;
+    private LocalDateTime dateTime;
+public Car(String plateNumber, LocalDateTime dateTime) {
+    this.plateNumber = plateNumber;
+    this.dateTime = dateTime;
+}
+
+public String getPlateNumber() {
+    return plateNumber;
+}
+
+public LocalDateTime getDateTime() {
+    return dateTime;
+}
+}
+}
